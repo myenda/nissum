@@ -44,6 +44,9 @@ public class FraudCreditCardUtil {
 	
 	public static Set<String> getFraudCreditcards(List<CreditCard> transactions) {
 		Set<String> fraudCreditCards = null;
+		/**
+		 * Creating Map Grouping Transactions by CreditCardTokenNumber
+		 */
 		Map<String, List<CreditCard>> transactionsByCreditCardMap =
 			transactions.stream().collect(Collectors.groupingBy(CreditCard::getCreditCardTokenNumber));
 		fraudCreditCards = getFraudCardsFromMap(transactionsByCreditCardMap);
@@ -53,6 +56,13 @@ public class FraudCreditCardUtil {
 	private static Set<String> getFraudCardsFromMap(Map<String, List<CreditCard>> transactionsByCreditCardMap) {
 		Set<String> fraudCreditCards = new HashSet<String>();
 		transactionsByCreditCardMap.forEach((k,v)-> {
+			/**
+			 * Sorting all transactions in Ascending order for each creditcard 
+			 * Cosidering 24hrs as upperbound and 0 as lowerbound calculating differnce between transactions and adding sum
+			 * if it is greater than or equal to 2000 then add card to set and go next credit card 
+			 * else move lowerbound to 1 and start iteration from there sum it up till 24 hrs upperbound Repeat the process
+			 */
+			//TODO Still we can improvise the code and working on it
 			Collections.sort(v, CreditCard.SortByTransactionDate);
 			LocalDateTime firstTransactionDate = v.get(0).getTransactionDateTime();
 			Double sum = v.get(0).getAmount();
@@ -69,10 +79,10 @@ public class FraudCreditCardUtil {
 						}
 							
 					} else {
-						firstTransactionDate = v.get(i).getTransactionDateTime();
-						sum = sum-v.get(lbIndex).getAmount();
 						lbIndex++;
-						i--;
+						sum = v.get(lbIndex).getAmount();
+						firstTransactionDate = v.get(lbIndex).getTransactionDateTime();
+						i = lbIndex+1;
 					}
 						
 				}
