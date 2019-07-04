@@ -38,15 +38,13 @@ public class CreditCardFraudMonitoringSystem {
 		
 		transactionsByCreditCardMap.forEach((k,v)-> {
 			Collections.sort(v, CreditCard.SortByTransactionDate);
-			Date firstTransactionDate = v.get(0).getTransactionDateTime();
+			LocalDateTime firstTransactionDate = v.get(0).getTransactionDateTime();
 			Double sum = v.get(0).getAmount();
 			int lbIndex = 0;
 			if(v.size()>1) {
 				for(int i=1;i<v.size();i++) {
-					Date currDate = v.get(i).getTransactionDateTime();
-					Duration  mins = java.time.Duration.between(
-					LocalDateTime.of(firstTransactionDate.getYear(), firstTransactionDate.getMonth(), firstTransactionDate.getDay(), firstTransactionDate.getHours(), firstTransactionDate.getMinutes()), 
-					LocalDateTime.of(currDate.getYear(),currDate.getMonth(),currDate.getDay(),currDate.getHours(),currDate.getMinutes()));
+					LocalDateTime currDate = v.get(i).getTransactionDateTime();
+					Duration mins = Duration.between(firstTransactionDate, currDate);
 					if(mins.toMinutes()<=1440) {
 						sum = sum + v.get(i).getAmount();
 						if(sum>=2000) {
@@ -71,25 +69,24 @@ public class CreditCardFraudMonitoringSystem {
 	}
 	
 	public static void main(String args[]) {
-		//SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  		
 		List<CreditCard> transactions = null;
 		
 			transactions = Stream
-					.of(new CreditCard("123456789012",new Date(),300.00),
-						new CreditCard("123456789013",new Date(),300.00),	
-						new CreditCard("123456789012",new Date(),700.00),
-						new CreditCard("123456789013",new Date(),300.12),
-						new CreditCard("123456789012",new Date(),1300.12),
-						new CreditCard("123456789013",new Date(),1400.12),
-						new CreditCard("123456789012",new Date(),300.12),
-						new CreditCard("123456789013",new Date(),300.12),
-						new CreditCard("123456789012",new Date(),300.12),
-						new CreditCard("123456789013",new Date(),300.12),
-						new CreditCard("123456789014",new Date(),1300.12),
-						new CreditCard("123456789017",new Date(),300.12),
-						new CreditCard("123456789016",new Date(),300.12),
-						new CreditCard("123456789015",new Date(),300.12),
-						new CreditCard("123456789014",new Date(),700.12))
+					.of(new CreditCard("123456789012",LocalDateTime.now(),300.00),
+						new CreditCard("123456789013",LocalDateTime.now().plusDays(1l),300.00),	
+						new CreditCard("123456789012",LocalDateTime.now().plusHours(12l),700.00),
+						new CreditCard("123456789013",LocalDateTime.now().plusHours(12l),300.12),
+						new CreditCard("123456789012",LocalDateTime.now().minusDays(1l),1300.12),
+						new CreditCard("123456789013",LocalDateTime.now().plusHours(12l),1400.12),
+						new CreditCard("123456789012",LocalDateTime.now().plusDays(1l),300.12),
+						new CreditCard("123456789013",LocalDateTime.now().plusHours(12l),300.12),
+						new CreditCard("123456789012",LocalDateTime.now().minusDays(2l),300.12),
+						new CreditCard("123456789013",LocalDateTime.now().plusHours(12l),300.12),
+						new CreditCard("123456789014",LocalDateTime.now().plusHours(12l),1300.12),
+						new CreditCard("123456789017",LocalDateTime.now().plusHours(12l),300.12),
+						new CreditCard("123456789016",LocalDateTime.now().plusHours(12l),300.12),
+						new CreditCard("123456789015",LocalDateTime.now().plusDays(1l),300.12),
+						new CreditCard("123456789014",LocalDateTime.now().plusDays(1l),700.12))
 					.collect(Collectors.toCollection(ArrayList::new));
 		
 		CreditCardFraudMonitoringSystem creditCardFraudMonitoringSystem = new CreditCardFraudMonitoringSystem();

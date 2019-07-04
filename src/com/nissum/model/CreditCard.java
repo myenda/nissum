@@ -3,6 +3,7 @@
  */
 package com.nissum.model;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -13,14 +14,14 @@ import java.util.Date;
 public class CreditCard {
 	
 	private String creditCardTokenNumber;
-	private Date transactionDateTime;
+	private LocalDateTime transactionDateTime;
 	private Double amount;
 	/**
 	 * @param creditCardTokenNumber
 	 * @param transactionDateTime
 	 * @param amount
 	 */
-	public CreditCard(String creditCardTokenNumber, Date transactionDateTime, Double amount) {
+	public CreditCard(String creditCardTokenNumber, LocalDateTime transactionDateTime, Double amount) {
 		super();
 		this.creditCardTokenNumber = creditCardTokenNumber;
 		this.transactionDateTime = transactionDateTime;
@@ -41,13 +42,13 @@ public class CreditCard {
 	/**
 	 * @return the transactionDateTime
 	 */
-	public Date getTransactionDateTime() {
+	public LocalDateTime getTransactionDateTime() {
 		return transactionDateTime;
 	}
 	/**
 	 * @param transactionDateTime the transactionDateTime to set
 	 */
-	public void setTransactionDateTime(Date transactionDateTime) {
+	public void setTransactionDateTime(LocalDateTime transactionDateTime) {
 		this.transactionDateTime = transactionDateTime;
 	}
 	/**
