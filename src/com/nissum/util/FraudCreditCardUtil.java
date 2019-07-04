@@ -85,7 +85,7 @@ public class FraudCreditCardUtil {
 							lbIndex++;
 							sum = v.get(lbIndex).getAmount();
 							firstTransactionDate = v.get(lbIndex).getTransactionDateTime();
-							i = lbIndex+1;
+							i--;
 						}
 							
 					}
@@ -97,5 +97,5 @@ public class FraudCreditCardUtil {
 		);
 		return fraudCreditCards;
 	}
-
+	
 }
