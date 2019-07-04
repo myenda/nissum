@@ -64,12 +64,13 @@ public class CreditCard {
 		this.amount = amount;
 	}
 	
+	public static Comparator<CreditCard> SortByTransactionDate = (c1, c2) -> {return c1.getTransactionDateTime().compareTo(c2.getTransactionDateTime());};
 	
-	public static Comparator<CreditCard> SortByTransactionDate = new Comparator<CreditCard>() {
-		public int compare(CreditCard c1, CreditCard c2) {
-		   /*For ascending order*/
-		   return c1.getTransactionDateTime().compareTo(c2.getTransactionDateTime());
-		}
-	};
+//	public static Comparator<CreditCard> SortByTransactionDate = new Comparator<CreditCard>() {
+//		public int compare(CreditCard c1, CreditCard c2) {
+//		   /*For ascending order*/
+//		   return c1.getTransactionDateTime().compareTo(c2.getTransactionDateTime());
+//		}
+//	};
 	
 }
