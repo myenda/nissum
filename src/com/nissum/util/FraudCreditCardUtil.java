@@ -66,29 +66,33 @@ public class FraudCreditCardUtil {
 			Collections.sort(v, CreditCard.SortByTransactionDate);
 			LocalDateTime firstTransactionDate = v.get(0).getTransactionDateTime();
 			Double sum = v.get(0).getAmount();
-			int lbIndex = 0;
-			if(v.size()>1) {
-				for(int i=1;i<v.size();i++) {
-					LocalDateTime currDate = v.get(i).getTransactionDateTime();
-					Duration mins = Duration.between(firstTransactionDate, currDate);
-					if(mins.toMinutes()<=1440) {
-						sum = sum + v.get(i).getAmount();
-						if(sum>=2000) {
-							fraudCreditCards.add(k);
-							break;
+			if(sum>=2000) {
+				fraudCreditCards.add(k);
+			} else {
+				int lbIndex = 0;
+				if(v.size()>1) {
+					for(int i=1;i<v.size();i++) {
+						LocalDateTime currDate = v.get(i).getTransactionDateTime();
+						Duration mins = Duration.between(firstTransactionDate, currDate);
+						if(mins.toMinutes()<=1440) {
+							sum = sum + v.get(i).getAmount();
+							if(sum>=2000) {
+								fraudCreditCards.add(k);
+								break;
+							}
+								
+						} else {
+							lbIndex++;
+							sum = v.get(lbIndex).getAmount();
+							firstTransactionDate = v.get(lbIndex).getTransactionDateTime();
+							i = lbIndex+1;
 						}
 							
-					} else {
-						lbIndex++;
-						sum = v.get(lbIndex).getAmount();
-						firstTransactionDate = v.get(lbIndex).getTransactionDateTime();
-						i = lbIndex+1;
 					}
-						
 				}
-			}
 			
 			}
+		}
 		
 		);
 		return fraudCreditCards;
