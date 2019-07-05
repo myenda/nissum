@@ -60,9 +60,10 @@ public class FraudCreditCardUtil {
 			 * Sorting all transactions in Ascending order for each creditcard 
 			 * Cosidering 24hrs as upperbound and 0 as lowerbound calculating differnce between transactions and adding sum
 			 * if it is greater than or equal to 2000 then add card to set and go next credit card 
-			 * else move lowerbound to 1 and start iteration from there sum it up till 24 hrs upperbound Repeat the process
+			 * else move lowerbound to 1 and move i to last transaction condition which got failed - 1 instead of repeating iterations from starting 
+			 * because we already calculated sum and we need to remove the lbindex sum from the total and add the sum of new element and Repeat the same process
 			 */
-			//TODO Still we can improvise the code and working on it
+			//TODO Still we can improvise the code
 			Collections.sort(v, CreditCard.SortByTransactionDate);
 			LocalDateTime firstTransactionDate = v.get(0).getTransactionDateTime();
 			Double sum = v.get(0).getAmount();
@@ -82,9 +83,9 @@ public class FraudCreditCardUtil {
 							}
 								
 						} else {
+							firstTransactionDate = v.get(lbIndex+1).getTransactionDateTime();
+							sum = sum-v.get(lbIndex).getAmount();
 							lbIndex++;
-							sum = v.get(lbIndex).getAmount();
-							firstTransactionDate = v.get(lbIndex).getTransactionDateTime();
 							i--;
 						}
 							
